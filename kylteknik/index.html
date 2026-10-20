@@ -1,0 +1,702 @@
+<title>Kylteknikkursen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: sidonavigering till vänster, en läsbar kolumn till höger. Datablads-känsla: kalla toner, siffror i mono. */
+:root{
+  --bg:#F2F5F6;--panel:#FFFFFF;--ink:#12212A;--mute:#4F616B;--line:#C9D5DA;
+  --accent:#0A6C8B;--accent-ink:#FFFFFF;--soft:#E1EEF2;
+  --good:#17703F;--goodbg:#DDF0E5;--warn:#7A4E00;--warnbg:#F8EBCB;--bad:#A8261B;--badbg:#F7DEDA;
+  --f-head:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D181E;--panel:#14232B;--ink:#E6EEF1;--mute:#9DB0B9;--line:#2A3E48;
+  --accent:#58BCD8;--accent-ink:#06222C;--soft:#193340;
+  --good:#6FD39B;--goodbg:#143325;--warn:#E8BE5A;--warnbg:#3A2E10;--bad:#FF8F82;--badbg:#3C1A17;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D181E;--panel:#14232B;--ink:#E6EEF1;--mute:#9DB0B9;--line:#2A3E48;
+  --accent:#58BCD8;--accent-ink:#06222C;--soft:#193340;
+  --good:#6FD39B;--goodbg:#143325;--warn:#E8BE5A;--warnbg:#3A2E10;--bad:#FF8F82;--badbg:#3C1A17;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--f-body)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+h1,h2,h3{font-family:var(--f-head);font-weight:700;line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:2.3rem}h2{font-size:1.5rem;margin-top:2rem}h3{font-size:1.15rem;margin-top:1.4rem}
+p{margin:.6em 0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.brand{font:700 1.5rem var(--f-head);letter-spacing:.01em}
+.brand small{display:block;font:400 .85rem var(--f-body);color:var(--mute);letter-spacing:0}
+.prog{display:flex;align-items:center;gap:10px;font:500 .85rem var(--f-mono)}
+.prog .bar{width:160px}
+.btn{font:600 1rem var(--f-body);background:var(--accent);color:var(--accent-ink);border:2px solid var(--accent);border-radius:4px;padding:9px 16px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.alt{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.sm{padding:5px 10px;font-size:.9rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.shell{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;margin-top:22px}
+nav#nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:12px;align-self:start}
+nav#nav a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;padding:8px 10px;border-left:4px solid transparent;text-decoration:none;color:var(--ink);font-weight:600}
+nav#nav a:hover{background:var(--soft)}
+nav#nav a[aria-current="page"]{border-left-color:var(--accent);background:var(--soft)}
+nav#nav .pc{font:500 .8rem var(--f-mono);color:var(--mute)}
+nav#nav .sep{height:1px;background:var(--line);margin:8px 0}
+main#main{min-width:0;max-width:760px}
+.eyebrow{font:500 .85rem var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 6px}
+.lead{font-size:1.15rem;color:var(--mute)}
+.bar{height:10px;background:var(--line);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent)}
+.tblwrap{overflow-x:auto;margin:1em 0;border:1px solid var(--line);background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 .8rem var(--f-mono);text-transform:uppercase;letter-spacing:.05em;background:var(--soft)}
+td.num,.mono{font-family:var(--f-mono)}
+.note{border-left:4px solid var(--accent);background:var(--soft);padding:10px 14px;margin:1em 0}
+.note.warn{border-color:var(--warn);background:var(--warnbg)}
+ol.steps{padding-left:1.3em}ol.steps li{margin:.3em 0}
+.sources{background:var(--panel);border:1px solid var(--line);padding:4px 18px 14px;margin-top:1.6rem}
+.sources li{margin:.5em 0}
+.sources span{display:block;color:var(--mute);font-size:.92rem}
+fieldset.q{border:1px solid var(--line);background:var(--panel);margin:14px 0;padding:12px 16px 10px}
+fieldset.q legend{font-weight:700;padding:0 6px}
+.qn{font:500 .8rem var(--f-mono);color:var(--mute);margin-right:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border:1px solid transparent;cursor:pointer}
+.opt:hover{background:var(--soft)}
+.opt input{margin-top:.4em;accent-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--goodbg)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.fb{margin:8px 0 2px;padding:8px 12px;font-size:.95rem}
+.fb.good{background:var(--goodbg);color:var(--ink);border-left:4px solid var(--good)}
+.fb.bad{background:var(--badbg);color:var(--ink);border-left:4px solid var(--bad)}
+textarea,input[type=number],select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--ink);border-radius:3px;padding:8px;width:100%}
+input[type=number]{max-width:140px;font-family:var(--f-mono)}
+select{width:auto;max-width:100%}
+.tq{background:var(--panel);border:1px solid var(--line);padding:12px 16px;margin:14px 0}
+.tq label{font-weight:700;display:block;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-size:.85rem;padding:2px 9px;border:1px solid var(--line)}
+.chip.ok{background:var(--goodbg);border-color:var(--good)}
+.chip.no{background:var(--badbg);border-color:var(--bad)}
+details{margin:6px 0}summary{cursor:pointer;font-weight:600}
+.submitbar{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0;align-items:center}
+.sumbox{border:2px solid var(--ink);background:var(--panel);padding:14px 18px;margin:18px 0}
+.big{font:700 2.4rem var(--f-head)}
+.lv{font:600 .8rem var(--f-mono);padding:2px 8px;border:1px solid currentColor;white-space:nowrap}
+.lv-good{color:var(--good)}.lv-ok{color:var(--accent)}.lv-low{color:var(--bad)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:14px 0}
+.card{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);background:var(--panel);padding:12px 14px;text-decoration:none;color:var(--ink)}
+.card:hover{border-color:var(--accent)}
+.card b{font:700 1.1rem var(--f-head)}
+.card span{font-size:.9rem;color:var(--mute)}
+.rrow{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:6px 16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rrow .st{font:500 .85rem var(--f-mono);color:var(--mute)}
+.rrow .bar{grid-column:1 / -1}
+.imp{background:var(--panel);border:1px solid var(--line);padding:10px 16px;margin:10px 0}
+.imp ul{margin:.3em 0;padding-left:1.2em}
+.dtools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.dtools .grp{display:flex;flex-wrap:wrap;gap:6px;padding-right:10px;margin-right:4px;border-right:1px solid var(--line)}
+.dhint{font-size:.92rem;color:var(--mute);min-height:1.4em;margin:4px 0}
+svg.canvas{display:block;width:100%;height:auto;background:var(--panel);border:1px solid var(--ink);touch-action:none;user-select:none}
+svg.canvas .gridl{stroke:var(--line);stroke-width:1;stroke-dasharray:2 6}
+svg.canvas .node{fill:var(--soft);stroke:var(--ink);stroke-width:2}
+svg.canvas .node.sel{stroke:var(--accent);stroke-width:4}
+svg.canvas .node.pend{stroke:var(--accent);stroke-width:4;stroke-dasharray:6 4}
+svg.canvas text{fill:var(--ink);font:600 14px var(--f-body);pointer-events:none}
+svg.canvas .pipe{stroke:var(--ink);stroke-width:3;fill:none}
+svg.canvas .pipe.sel{stroke:var(--accent);stroke-width:5}
+svg.canvas .hit{stroke:transparent;stroke-width:16;fill:none;cursor:pointer}
+svg.canvas .ah{fill:var(--ink)}svg.canvas .ah2{fill:var(--accent)}
+.pipeform{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0;font-size:.95rem}
+.calc{background:var(--panel);border:1px solid var(--ink);padding:12px 16px;margin:1.2em 0}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.calc label{display:block;font-size:.9rem;margin-bottom:3px}
+.calc output{display:block;margin-top:10px;font:500 1rem var(--f-mono)}
+.checklist{list-style:none;padding:0}.checklist li{padding:4px 0}
+.checklist input{margin-right:8px;accent-color:var(--accent)}
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:16px}
+  nav#nav{position:static;flex-direction:row;overflow-x:auto;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  nav#nav a{border-left:0;border-bottom:4px solid transparent;white-space:nowrap}
+  nav#nav a[aria-current="page"]{border-bottom-color:var(--accent)}
+  nav#nav .sep{display:none}
+  h1{font-size:1.9rem}
+  .rrow{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Kyl- och värmepumpsteknik<small>Interaktiv kurs med kryssfrågor, ritövningar och slutprov</small></div>
+    <div class="prog"><span id="progtxt"></span><div class="bar" id="progbar" role="img" aria-label="Kursframsteg"><span></span></div><button class="btn alt sm" id="theme" type="button">Mörkt/ljust</button></div>
+  </header>
+  <div class="shell">
+    <nav id="nav" aria-label="Kursdelar"></nav>
+    <main id="main" tabindex="-1"></main>
+  </div>
+</div>
+<script>
+'use strict';
+const L={
+  skolverket:{t:'Skolverket: Ämnesplan Kyl- och värmepumpsteknik',u:'https://syllabuswebb.skolverket.se/subject/KYL/2/pdf',d:'Kursens centrala innehåll, bland annat mätning av överhettning och underkylning.'},
+  skvp:{t:'Svenska Kyl & Värmepumpföreningen (SKVP)',u:'https://www.skvp.se',d:'Branschorganisation för tillverkare, installatörer och serviceföretag.'},
+  nvfgas:{t:'Naturvårdsverket: Fluorerade växthusgaser',u:'https://www.naturvardsverket.se/vagledning-och-stod/kemikalier/fluorerade-vaxthusgaser/',d:'Myndighetens vägledning om F-gaser, läckagekontroll och certifiering.'},
+  nvstat:{t:'Naturvårdsverket: Stationär kyl-, luftkonditionerings- och värmepumpsutrustning',u:'https://www.naturvardsverket.se/vagledning-och-stod/kemikalier/fluorerade-vaxthusgaser/stationar-kyl--luftkonditionerings--och-varmepumpsutrustning/',d:'Krav på certifiering, läckagekontroll och registerföring.'},
+  eu573:{t:'EU-förordning 2024/573 om fluorerade växthusgaser (EUR-Lex)',u:'https://eur-lex.europa.eu/eli/reg/2024/573/oj',d:'Själva förordningstexten.'},
+  sfs1128:{t:'Förordning (2016:1128) om fluorerade växthusgaser',u:'https://lagen.nu/2016:1128',d:'Svensk förordning som kompletterar EU-reglerna. Kontrollera att versionen är aktuell.'},
+  sfs901:{t:'Förordning (1998:901) om verksamhetsutövares egenkontroll',u:'https://lagen.nu/1998:901',d:'Grunden för egenkontroll enligt miljöbalken.'},
+  avkem:{t:'Arbetsmiljöverket: Kemiska arbetsmiljörisker (presentation)',u:'https://www.av.se/globalassets/filer/publikationer/presentationer/kemiska-arbetsmiljorisker-presentation.pdf',d:'Översikt över hur kemiska risker ska bedömas och hanteras.'},
+  afs10:{t:'Arbetsmiljöverket: Risker i arbetsmiljön (AFS 2023:10)',u:'https://www.av.se/globalassets/filer/publikationer/foreskrifter/risker-i-arbetsmiljon-afs2023-10.pdf',d:'Föreskrifter som bland annat gäller kemiska riskkällor.'}
+};
+const DRAW={
+  d1:{title:'Rita ett direkt kylsystem',
+    brief:'Rita kylkretsen i ett direkt system. Placera de fyra huvudkomponenterna och dra rör i köldmediets flödesriktning. Två av komponenterna i listan hör inte hemma i ett direkt system.',
+    nodes:['Kompressor','Kondensor','Expansionsventil','Förångare'],extra:['Köldbärarpump','Kylbatteri'],
+    alts:[[['Kompressor','Kondensor'],['Kondensor','Expansionsventil'],['Expansionsventil','Förångare'],['Förångare','Kompressor']]]},
+  d2:{title:'Rita ett delvis indirekt system',
+    brief:'Rita ett system med köldbärare på den kalla sidan. Köldmediekretsen har fyra komponenter. Förångaren kyler köldbäraren, som pumpas till ett kylbatteri i det utrymme som ska kylas. Pumpen får sitta före eller efter förångaren.',
+    nodes:['Kompressor','Kondensor','Expansionsventil','Förångare','Köldbärarpump','Kylbatteri'],extra:[],
+    alts:[
+      [['Kompressor','Kondensor'],['Kondensor','Expansionsventil'],['Expansionsventil','Förångare'],['Förångare','Kompressor'],['Köldbärarpump','Förångare'],['Förångare','Kylbatteri'],['Kylbatteri','Köldbärarpump']],
+      [['Kompressor','Kondensor'],['Kondensor','Expansionsventil'],['Expansionsventil','Förångare'],['Förångare','Kompressor'],['Förångare','Köldbärarpump'],['Köldbärarpump','Kylbatteri'],['Kylbatteri','Förångare']]
+    ]}
+};
+const MODS=[];
+MODS.push({id:'m1',short:'Uppbyggnad',title:'Kylsystemets uppbyggnad',
+intro:'Du lär dig hur ett kylsystem är uppbyggt och skillnaden mellan direkta, delvis indirekta och fullständigt indirekta system.',
+blocks:[
+{h:'Kylprocessen i korthet',html:`<p>Ett kylsystem flyttar värme från en plats med låg temperatur till en plats med högre temperatur. Det görs av ett köldmedium som cirkulerar i en sluten krets och växlar mellan vätska och gas.</p>
+<ol class="steps"><li><b>Kompression.</b> Kompressorn suger in gas och höjer tryck och temperatur.</li><li><b>Kondensering.</b> Kondensorn avger värme och gasen blir vätska.</li><li><b>Expansion.</b> Expansionsventilen sänker trycket och doserar flödet.</li><li><b>Förångning.</b> Förångaren tar upp värme och vätskan blir gas igen.</li></ol>`},
+{h:'Direkta system',html:`<p>I ett direkt system förångas köldmediet i en förångare som sitter i det utrymme eller luftflöde som ska kylas. Exempel är split-luftkonditionering och kylrum med luftkylare.</p><p><b>Fördelar:</b> få komponenter och hög verkningsgrad. <b>Nackdelar:</b> stor mängd köldmedium och långa rörledningar där köldmedium kan läcka ut.</p>`},
+{h:'Delvis indirekta system',html:`<p>I ett delvis indirekt system används en köldbärare, till exempel vatten-glykol, på en av sidorna. Oftast kyler förångaren köldbäraren, som pumpas ut till kylbehovet. Kondensorn kan vara luftkyld.</p>`},
+{h:'Fullständigt indirekta system',html:`<p>I ett fullständigt indirekt system finns köldbärare på både kalla och varma sidan. Köldmediet stannar i ett kompakt aggregat, ofta i ett maskinrum eller utomhus. Ett exempel är ett vätskekylaggregat som kyler vatten-glykol, som pumpas ut till kylbatterier.</p>
+<div class="tblwrap"><table><thead><tr><th>System</th><th>Köldbärare</th><th>Mängd köldmedium</th><th>Exempel</th></tr></thead><tbody>
+<tr><td>Direkt</td><td>Ingen</td><td>Stor</td><td>Split-luftkonditionering</td></tr>
+<tr><td>Delvis indirekt</td><td>På en sida</td><td>Mindre</td><td>Vätskekylaggregat för processkyla</td></tr>
+<tr><td>Fullständigt indirekt</td><td>På båda sidor</td><td>Minst</td><td>Vätskekylaggregat med kylbatterier</td></tr></tbody></table></div>
+<p>Indirekta system kräver en extra värmeväxlare och en pump. Det ger energiförluster, men ger också säkrare hantering när köldmediet är brandfarligt eller giftigt.</p>
+<div class="note">Begreppen används något olika i läroböcker. I den här kursen betyder delvis indirekt köldbärare på en sida och fullständigt indirekt köldbärare på båda sidor. Följ din lärares definition om den skiljer sig.</div>`}],
+links:['skolverket','skvp'],
+mcq:[
+{q:'Vad kännetecknar ett direkt system?',o:['Köldmediet kyler via en vätska som pumpas runt','Köldmediet kyler bara med en fläkt','Köldmediet förångas direkt i förångaren där kylan behövs','Köldmediet förångas i kondensorn'],a:2,t:'Direkta system',e:'I ett direkt system sitter förångaren där kylan behövs.'},
+{q:'Vad kännetecknar ett indirekt system?',o:['En köldbärare, till exempel glykol, transporterar kylan ut','Köldmediet pumpas ut i hela lokalen','Det saknar kompressor','Det saknar förångare'],a:0,t:'Indirekta system',e:'Köldmediet kyler köldbäraren, och köldbäraren transporterar kylan ut.'},
+{q:'Vilket system innehåller oftast mest köldmedium?',o:['Indirekt system','Direkt system','Båda lika mycket','Inget av dem'],a:1,t:'Mängd köldmedium',e:'Ett direkt system har köldmedium i långa rör ut till förångaren.'},
+{q:'Vad används som köldbärare i ett indirekt system?',o:['Smörjolja','Kvävgas','Köldmedium R404A','Vatten med glykol'],a:3,t:'Köldbärare',e:'Vatten med glykol är vanligt eftersom det inte fryser.'},
+{q:'Vad är en nackdel med ett indirekt system?',o:['Det ger sämre arbetsmiljö','Det behöver extra värmeväxlare och pump','Det kan inte kyla alls','Det kräver mer köldmedium'],a:1,t:'Nackdelar med indirekta system',e:'Extra värmeväxlare och pump ger energiförluster.'}],
+txt:[
+{q:'Förklara skillnaden mellan ett direkt och ett fullständigt indirekt system och ge en fördel med vardera.',need:3,
+ groups:[{l:'Direkt: förångar direkt i det som kyls',any:['direkt']},{l:'Indirekt: köldbärare (glykol, brine)',any:['köldbärare','glykol','brine','sekundär']},{l:'Fördel direkt: enklare / högre verkningsgrad',any:['enklare','färre komponenter','högre verkningsgrad','bättre verkningsgrad','effektivare']},{l:'Fördel indirekt: mindre köldmedium / säkrare',any:['mindre köldmedi','mindre mängd','läckage','maskinrum','säkerhet','säkrare']}],
+ model:'I ett direkt system förångas köldmediet direkt i förångaren i det som ska kylas. Fördelen är färre komponenter och högre verkningsgrad. I ett fullständigt indirekt system överförs värmen via en köldbärare på både kalla och varma sidan. Fördelen är att mängden köldmedium blir liten och kan hållas i ett maskinrum.'},
+{q:'Varför väljer man ofta ett indirekt system när köldmediet är brandfarligt eller giftigt?',need:2,
+ groups:[{l:'Mindre mängd köldmedium',any:['mindre','begränsa','litet','liten']},{l:'Aggregatet placeras i maskinrum eller utomhus',any:['maskinrum','utomhus','separat','utanför']},{l:'Köldbärare (vatten/glykol) i lokalerna',any:['köldbärare','vatten','glykol']}],
+ model:'Då kan köldmediet hållas i ett litet aggregat i ett maskinrum eller utomhus, medan en ofarlig köldbärare som vatten-glykol går ut i lokalerna där människor finns.'}],
+draw:'d1'});
+
+MODS.push({id:'m2',short:'Komponenter',title:'Komponenter, hållbarhet och korrosion',
+intro:'Du lär dig vad varje komponent gör och hur systemet skyddas mot korrosion och mekanisk påverkan.',
+blocks:[
+{h:'Komponenternas uppgifter',html:`<div class="tblwrap"><table><thead><tr><th>Komponent</th><th>Uppgift</th></tr></thead><tbody>
+<tr><td>Kompressor</td><td>Höjer tryck och temperatur och driver cirkulationen.</td></tr>
+<tr><td>Kondensor</td><td>Avger värme till luft eller vatten. Het gas blir vätska.</td></tr>
+<tr><td>Expansionsventil</td><td>Sänker trycket och doserar flödet till förångaren. En termostatisk ventil styr också överhettningen.</td></tr>
+<tr><td>Förångare</td><td>Tar upp värme från det som ska kylas. Vätskan förångas.</td></tr>
+<tr><td>Filtertork</td><td>Fångar fukt, syra och partiklar i vätskeledningen.</td></tr>
+<tr><td>Siktglas</td><td>Visar om vätskan är fri från bubblor.</td></tr>
+<tr><td>Vätskebehållare</td><td>Buffert för köldmedium när lasten varierar.</td></tr>
+<tr><td>Vätskeavskiljare</td><td>Skyddar kompressorn från vätska i sugledningen.</td></tr>
+<tr><td>Pressostat (HP/LP)</td><td>Stoppar kompressorn vid för högt eller för lågt tryck.</td></tr></tbody></table></div>`},
+{h:'Material och hållbarhet',html:`<p>Material måste passa köldmedium, olja och köldbärare. Koppar är vanligt med HFC-köldmedier. Ammoniak (R717) angriper koppar och kopparlegeringar, därför används stål i ammoniakanläggningar. Ett rent och torrt system ger lång livslängd.</p>`},
+{h:'Korrosion och skydd',html:`<ul><li><b>Invändigt:</b> fukt i systemet kan tillsammans med köldmedium och olja bilda syror. Skydd: evakuera ordentligt (vakuum) och använd filtertork.</li>
+<li><b>Utvändigt:</b> kondens och fukt under isolering ger korrosion. Skydd: hel ångspärr, målning eller galvanisering.</li>
+<li><b>Galvanisk korrosion:</b> uppstår mellan olika metaller i kontakt med fukt. Skydd: rätt materialval och isolerande skarvar.</li>
+<li><b>Köldbärare:</b> vatten-glykol innehåller korrosionsinhibitorer som förbrukas med tiden. Koncentrationen ska kontrolleras.</li></ul>`},
+{h:'Mekanisk påverkan',html:`<ul><li>Vibrationer från kompressorn kan ge utmattning och rörbrott. Använd vibrationsdämpare och rörstöd.</li><li>Rör växer och krymper med temperaturen. Planera rörböjar och fixpunkter.</li><li>Vätskeslag i kompressorn ger mekaniska skador.</li></ul>
+<div class="note">Konstruktion och säkerhet för kylsystem styrs av standarden SS-EN 378 och EU:s regler för tryckbärande anordningar. Arbetsmiljöverket har föreskrifter om tryckbärande anordningar (AFS 2023:5).</div>`}],
+links:['skolverket','skvp'],
+mcq:[
+{q:'Vilken är expansionsventilens huvuduppgift?',o:['Höja trycket och temperaturen','Sänka trycket och styra flödet till förångaren','Avge värme till omgivningen','Avskilja olja ur gasen'],a:1,t:'Expansionsventilens funktion',e:'Ventilen strypar flödet så att trycket sjunker.'},
+{q:'Vad gör filtertorken?',o:['Fångar fukt och partiklar i vätskeledningen','Höjer gasens temperatur','Mäter trycket','Kyler vätskan'],a:0,t:'Filtertorkens funktion',e:'Fukt och smuts skyddas mot så att syra och stopp inte uppstår.'},
+{q:'Vilket material bör undvikas i ammoniakanläggningar?',o:['Kolstål','Rostfritt stål','Koppar och mässing','Svetsade stålrör'],a:2,t:'Materialval och ammoniak',e:'Ammoniak angriper koppar och kopparlegeringar.'},
+{q:'Varför är fukt i kylsystemet ett problem?',o:['Det bildar syror och kan frysa i expansionsventilen','Det höjer verkningsgraden','Det förbättrar smörjningen','Det gör köldmediet ofarligt'],a:0,t:'Fukt och syrabildning',e:'Fukt orsakar korrosion och isproppar vid expansionsventilen.'},
+{q:'Vad är en vanlig orsak till rörbrott på grund av mekanisk påverkan?',o:['För lite köldmedium','Vibrationer från kompressorn utan vibrationsdämpare och rörstöd','För tjock isolering','Korrekt dimensionerade rörböjar'],a:1,t:'Vibrationer och rörupphängning',e:'Utmattning av rör vid kompressorn är en klassisk skadeorsak.'},
+{q:'Korrosion under isolering uppstår ofta när…',o:['Ångspärren är skadad och fukt tränger in','Isoleringen har rätt tjocklek','Systemet är torrt','Röret är målat'],a:0,t:'Korrosion under isolering',e:'Fukt som fastnar mot ett kallt rör ger korrosion som inte syns.'}],
+txt:[
+{q:'Beskriv vad en kondensor och en förångare gör med köldmediet och med omgivningen.',need:3,
+ groups:[{l:'Kondensorn avger värme',any:['avger','avgiv','värme ut']},{l:'Gas blir vätska (kondenserar)',any:['kondenser','vätska']},{l:'Förångaren tar upp värme',any:['tar upp','upptar','absorber']},{l:'Vätska blir gas (förångas)',any:['förång','gas']}],
+ model:'I kondensorn avger köldmediet värme till omgivningen och gasen kondenserar till vätska. I förångaren tar köldmediet upp värme från det som ska kylas och vätskan förångas till gas.'},
+{q:'Nämn tre åtgärder som skyddar ett kylsystem mot korrosion eller mekanisk påverkan.',need:3,
+ groups:[{l:'Isolering med hel ångspärr',any:['ångspärr','isoler']},{l:'Rätt material, målning eller galvanisering',any:['material','galvanis','målning','måla','rostskydd']},{l:'Vibrationsdämpare och rörstöd',any:['vibration','dämpare','upphängning','stöd','fäst']},{l:'Vakuum, torkning och filtertork',any:['vakuum','torka','filtertork']},{l:'Inhibitorer i köldbärare',any:['inhibitor']}],
+ model:'Exempel: hel ångspärr i isoleringen, vibrationsdämpare och rörstöd vid kompressorn, evakuering och filtertork för att få systemet torrt, rätt materialval samt inhibitorer i köldbäraren.'}],
+draw:'d2'});
+
+MODS.push({id:'m3',short:'Köldmedier',title:'Köldmedier och miljö',
+intro:'Du lär dig vad GWP och ODP betyder, hur utsläpp räknas om till koldioxidekvivalenter och vilka regler som gäller för läckagekontroll och behörighet.',
+blocks:[
+{h:'Varför regleras köldmedier?',html:`<p>Äldre köldmedier som CFC och HCFC bröt ned ozonskiktet och fasades ut enligt Montrealprotokollet. Många av ersättarna, HFC, är kraftiga växthusgaser. EU-förordning 2024/573 om fluorerade växthusgaser (F-gaser) ersatte förordning 517/2014. Syftet är att fasa ut F-gaser med hög klimatpåverkan och ersätta dem med alternativ med lägre påverkan. Naturvårdsverket är tillsynsvägledande myndighet i Sverige.</p>`},
+{h:'GWP, ODP och säkerhetsklass',html:`<p><b>ODP</b> anger hur mycket ett ämne bryter ned ozonskiktet. <b>GWP</b> anger klimatpåverkan jämfört med samma mängd koldioxid. Säkerhetsklassen har en bokstav för giftighet (A lägre, B högre) och en siffra för brandfarlighet (1 ingen, 2L svag, 2 brandfarlig, 3 högbrandfarlig).</p>
+<div class="tblwrap"><table><thead><tr><th>Köldmedium</th><th>Typ</th><th>GWP (ungefär)</th><th>Säkerhetsklass</th></tr></thead><tbody>
+<tr><td>R134a</td><td>HFC</td><td class="num">1 400</td><td>A1</td></tr>
+<tr><td>R404A</td><td>HFC-blandning</td><td class="num">3 900</td><td>A1</td></tr>
+<tr><td>R410A</td><td>HFC-blandning</td><td class="num">2 100</td><td>A1</td></tr>
+<tr><td>R32</td><td>HFC</td><td class="num">700</td><td>A2L</td></tr>
+<tr><td>R290 (propan)</td><td>Naturligt</td><td class="num">3</td><td>A3</td></tr>
+<tr><td>R744 (koldioxid)</td><td>Naturligt</td><td class="num">1</td><td>A1</td></tr>
+<tr><td>R717 (ammoniak)</td><td>Naturligt</td><td class="num">0</td><td>B2L</td></tr></tbody></table></div>
+<p>GWP-värdena skiljer sig något mellan olika rapporter. Vid beräkning av krav används värdena i förordningens bilagor.</p>`},
+{h:'Räkna koldioxidekvivalenter (CO₂e)',html:`<p class="mono">CO₂e (ton) = mängd (kg) × GWP ÷ 1000</p><p>Exempel: 20 kg med GWP 3 900 ger 20 × 3 900 ÷ 1000 = 78 ton CO₂e.</p>`},
+{h:'Läckagekontroll',html:`<p>Hur ofta en anläggning ska läckagekontrolleras beror på mängden i CO₂e. I stora drag gäller för system utan läckagevarningssystem: från 5 ton minst en gång per år, från 50 ton var sjätte månad och från 500 ton var tredje månad. Med läckagevarningssystem blir intervallen längre. Om ett läckage upptäcks ska det åtgärdas omgående och en ny läckagekontroll göras inom en månad. För vissa nyare ämnen räknas gränserna i kilogram.</p>
+<div class="note warn">Detta är en förenkling. Kontrollera alltid Naturvårdsverkets aktuella tabell för läckagekontroll. Den svenska förordningen anpassas fortfarande efter EU-förordningen.</div>`},
+{h:'Behörighet och dokumentation',html:`<ul><li>Den som utför läckagekontroll, installation, service eller återvinning av köldmedium ska vara personcertifierad. I Sverige görs examinationen hos godkända examinationscentra.</li>
+<li>Operatören, det vill säga den som äger eller driver anläggningen, för register över typ och mängd köldmedium, påfyllning, återvinning och utförda kontroller.</li>
+<li>Köldmedium får inte släppas ut. Det ska tas om hand och återvinnas.</li></ul>`}],
+links:['nvfgas','nvstat','eu573','sfs1128'],
+mcq:[
+{q:'Vad anger GWP?',o:['Hur mycket ozonskiktet bryts ned','Klimatpåverkan jämfört med koldioxid','Brandfarlighet','Tryck vid 20 °C'],a:1,t:'GWP',e:'GWP är Global Warming Potential.'},
+{q:'Vilken EU-förordning om fluorerade växthusgaser gäller sedan 2024?',o:['(EU) 2024/573','(EU) nr 517/2014','Maskindirektivet','ADR-konventionen'],a:0,t:'Aktuell F-gasförordning',e:'Förordning 2024/573 ersatte 517/2014.'},
+{q:'En anläggning har 10 kg köldmedium med GWP 2000. Hur många ton CO₂e är det?',o:['2 ton','20 ton','200 ton','20 000 ton'],a:1,t:'Beräkning av CO₂e',e:'10 × 2000 ÷ 1000 = 20 ton.'},
+{q:'Vem får utföra läckagekontroll, installation och service på utrustning med F-gaser?',o:['Vem som helst med verktyg','Personcertifierad personal','Endast anläggningens ägare','Endast elektriker'],a:1,t:'Personcertifiering',e:'Personcertifiering krävs för dessa arbetsuppgifter.'},
+{q:'Efter att ett läckage åtgärdats ska en ny läckagekontroll göras…',o:['Inom en månad','Inom ett år','Inom tre år','Det behövs ingen ny kontroll'],a:0,t:'Uppföljande läckagekontroll',e:'Åtgärdas läckaget ska en ny kontroll göras inom en månad.'},
+{q:'Vilket av följande är ett naturligt köldmedium med mycket låg GWP?',o:['R404A','R134a','R744 (koldioxid)','R410A'],a:2,t:'Naturliga köldmedier',e:'Koldioxid har GWP 1.'},
+{q:'Vilka köldmedier bröt ned ozonskiktet och reglerades av Montrealprotokollet?',o:['CFC och HCFC','Koldioxid och propan','Ammoniak och koldioxid','Isobutan'],a:0,t:'Ozonnedbrytande ämnen',e:'CFC och HCFC har hög ODP.'}],
+txt:[
+{q:'Vad ska en operatör göra och dokumentera för en anläggning med F-gaser? Nämn minst tre saker.',need:3,
+ groups:[{l:'Åtgärda läckage omgående',any:['åtgärd','laga','täta']},{l:'Läckagekontroller med rätt intervall',any:['läckagekontroll','kontroll']},{l:'Föra journal eller register',any:['journal','register','dokument','anteck']},{l:'Anlita certifierad personal',any:['certifier']}],
+ model:'Operatören ska se till att läckage åtgärdas omgående och följs upp med ny kontroll, att läckagekontroller görs med rätt intervall, att certifierad personal används samt att journal eller register förs över typ och mängd köldmedium, påfyllning, återvinning och kontroller.'},
+{q:'Förklara skillnaden mellan ODP och GWP och ge ett exempel på ett naturligt köldmedium.',need:3,
+ groups:[{l:'ODP: påverkan på ozonskiktet',any:['ozon']},{l:'GWP: klimatpåverkan / växthuseffekt',any:['växthus','klimat','global uppvärm']},{l:'Exempel: koldioxid, ammoniak, propan',any:['r744','koldioxid','ammoniak','r717','propan','r290','isobutan','r600']}],
+ model:'ODP anger hur mycket ett ämne bryter ned ozonskiktet. GWP anger hur mycket det bidrar till växthuseffekten jämfört med koldioxid. Exempel på naturliga köldmedier är koldioxid (R744), ammoniak (R717) och propan (R290).'}]});
+</script>
+<script>
+'use strict';
+MODS.push({id:'m4',short:'Arbetsmiljö',title:'Arbetsmiljö: köldmedier, köldbärare och oljor',
+intro:'Du lär dig vilka risker som finns vid arbete med köldmedier, köldbärare och oljor och hur du skyddar dig.',
+blocks:[
+{h:'Risker med köldmedier',html:`<div class="tblwrap"><table><thead><tr><th>Risk</th><th>Förklaring</th></tr></thead><tbody>
+<tr><td>Kvävning</td><td>Koldioxid och de flesta köldmediegaser är tyngre än luft och samlas lågt i slutna utrymmen. Det kan ge syrebrist.</td></tr>
+<tr><td>Giftighet</td><td>Ammoniak irriterar ögon och luftvägar och är giftig. Gasdetektor och andningsskydd behövs.</td></tr>
+<tr><td>Brand och explosion</td><td>Propan (R290) är högbrandfarligt. Undvik tändkällor och använd gnistfri utrustning.</td></tr>
+<tr><td>Köldskador</td><td>Vätskeformigt köldmedium som kommer på huden ger frostskador. Använd skyddsglasögon och handskar.</td></tr>
+<tr><td>Hög temperatur</td><td>Vissa fluorerade köldmedier kan sönderfalla till frätande ämnen vid brand eller mycket hög temperatur.</td></tr></tbody></table></div>`},
+{h:'Köldbärare och oljor',html:`<ul><li><b>Etylenglykol</b> är giftigt vid förtäring. <b>Propylenglykol</b> är mindre giftigt. <b>Etanol</b> är brandfarligt.</li>
+<li>Kylmaskinoljor kan irritera hud och ögon. Syntetiska oljor tar lätt upp fukt ur luften och ska hållas tillslutna.</li>
+<li>Spill på golvet ger halkrisk.</li></ul>`},
+{h:'Så arbetar du säkert',html:`<ul><li>Läs <b>säkerhetsdatabladet</b> för varje kemisk produkt. Det beskriver faror, skyddsåtgärder och första hjälpen.</li>
+<li>Gör en riskbedömning. Arbetsmiljöverkets föreskrifter om systematiskt arbetsmiljöarbete (AFS 2023:1) och om risker i arbetsmiljön (AFS 2023:10) gäller.</li>
+<li>Säkra god ventilation, gasdetektorer och tillgång till ögondusch där det behövs.</li>
+<li>Använd rätt personlig skyddsutrustning: skyddsglasögon, handskar och vid behov andningsskydd.</li></ul>`}],
+links:['avkem','afs10','nvfgas'],
+mcq:[
+{q:'Varför är koldioxid (R744) en risk i små slutna utrymmen?',o:['Den är högbrandfarlig','Den är tyngre än luft och kan ge syrebrist','Den bryter ned ozonskiktet','Den luktar starkt'],a:1,t:'Kvävningsrisk',e:'Koldioxid samlas lågt och trycker undan syre.'},
+{q:'Vilken säkerhetsklass har ett högbrandfarligt köldmedium med låg giftighet, till exempel propan?',o:['A1','A2L','A3','B2L'],a:2,t:'Säkerhetsklasser',e:'A anger låg giftighet och 3 högbrandfarligt.'},
+{q:'Var hittar du information om farliga egenskaper hos en kylmaskinolja?',o:['I säkerhetsdatabladet','På kvittot','I driftjournalen','På förpackningens färg'],a:0,t:'Säkerhetsdatablad',e:'Säkerhetsdatabladet beskriver faror och skyddsåtgärder.'},
+{q:'Vilken åtgärd är viktigast när ammoniak används?',o:['Gasdetektorer, ventilation och tillgång till skyddsutrustning','Använda kopparrör','Arbeta ensam','Ingen åtgärd behövs'],a:0,t:'Hantering av ammoniak',e:'Ammoniak är giftig och kräver detektion och ventilation.'},
+{q:'Vad gäller för etylenglykol som köldbärare?',o:['Det är ofarligt att dricka','Det är giftigt vid förtäring','Det är brandfarligt som bensin','Det är en olja'],a:1,t:'Köldbärare och hälsa',e:'Etylenglykol är giftigt. Propylenglykol är mindre giftigt.'},
+{q:'Vad kan hända om vätskeformigt köldmedium kommer på bar hud?',o:['Frostskador','Värmeskador','Ingenting','Elchock'],a:0,t:'Köldskador',e:'Köldmediet förångas snabbt och drar värme ur huden.'}],
+txt:[
+{q:'Beskriv tre arbetsmiljörisker vid arbete med köldmedier och hur du skyddar dig.',need:3,
+ groups:[{l:'Kvävning / syrebrist',any:['kväv','syrebrist']},{l:'Giftighet / irritation',any:['gift','irriter','ammoniak']},{l:'Brand / explosion',any:['brand','explosion','antänd','gnist']},{l:'Köldskador / frostskador',any:['köldskad','frostskad','frost']},{l:'Skyddsåtgärder (utrustning, ventilation)',any:['skyddsglasögon','handskar','ventilation','detektor','skyddsutrustning','andningsskydd']}],
+ model:'Kvävning vid läckage av tyngre gaser skyddas med ventilation och gasdetektor. Giftiga köldmedier som ammoniak kräver andningsskydd och larm. Brandfarliga köldmedier kräver att tändkällor undviks. Köldskador förebyggs med skyddsglasögon och handskar.'},
+{q:'Vad är ett säkerhetsdatablad och varför ska du läsa det före arbete med köldbärare eller olja?',need:2,
+ groups:[{l:'Beskriver faror och egenskaper',any:['faror','risker','egenskap','farlig']},{l:'Anger skydd, hantering eller första hjälpen',any:['skydd','första hjälpen','hantering','åtgärd']},{l:'Kommer från tillverkare eller leverantör',any:['produkt','leverantör','tillverkare','kemikali']}],
+ model:'Ett säkerhetsdatablad är ett dokument från leverantören som beskriver en kemisk produkts faror, hur den ska hanteras, vilket skydd som behövs och vad man gör vid olycka. Det läser man för att kunna göra en riskbedömning och arbeta säkert.'}]});
+
+MODS.push({id:'m5',short:'Drift & läcksökning',title:'Driftövervakning och läcksökning',
+intro:'Du lär dig vilka tryck och temperaturer som övervakas, vilka skyddsfunktioner som finns och hur man läcksöker säkert.',
+blocks:[
+{h:'Vad ska övervakas?',html:`<ul><li><b>Tryck:</b> lågtryck (sugsidan) och högtryck med manometrar eller tryckgivare.</li><li><b>Temperatur:</b> sugledning, vätskeledning, tryckledning, luft eller köldbärare.</li><li><b>Övrigt:</b> oljenivå, siktglas, ljud, vibrationer och avfrostning.</li></ul>
+<p>För ett givet köldmedium hör ett visst tryck ihop med en bestämd mättnadstemperatur. Därför kan man räkna om ett uppmätt tryck till förångnings- eller kondenseringstemperatur med en tryck-temperaturtabell.</p>`},
+{h:'Skyddsfunktioner',html:`<p>En <b>HP-pressostat</b> stoppar kompressorn vid för högt tryck. En <b>LP-pressostat</b> stoppar den vid för lågt sugtryck, till exempel vid läckage. Larm och läckagevarningssystem ger tidig varning.</p>`},
+{h:'Metoder för läcksökning',html:`<div class="tblwrap"><table><thead><tr><th>Metod</th><th>Observera</th></tr></thead><tbody>
+<tr><td>Visuell kontroll</td><td>Oljespår vid skarvar och kopplingar tyder ofta på läckage.</td></tr>
+<tr><td>Elektronisk läcksökare</td><td>Känner av köldmedium i luften. Sök långsamt och undvik drag.</td></tr>
+<tr><td>Läcksökningsspray eller tvålvatten</td><td>Bubblor visar läckan.</td></tr>
+<tr><td>UV-färg</td><td>Tillsats i oljan som lyser under UV-lampa.</td></tr>
+<tr><td>Tryckprovning med torr kvävgas</td><td>Trycksänkning över tid visar läckage.</td></tr>
+<tr><td>Vakuumprov</td><td>Evakuera och kontrollera att trycket inte stiger.</td></tr></tbody></table></div>`},
+{h:'Säker tryckprovning',html:`<div class="note warn">Använd torr kvävgas med reduceringsventil och säkerhetsventil. Använd aldrig syre eller tryckluft. Syre tillsammans med olja under tryck kan ge brand eller explosion. Provtrycket får inte överstiga anläggningens tillåtna tryck.</div>`}],
+links:['skolverket','nvstat','skvp'],
+mcq:[
+{q:'Vilken gas används normalt vid tryckprovning inför läcksökning?',o:['Syre','Tryckluft','Torr kvävgas','Acetylen'],a:2,t:'Säker tryckprovning',e:'Kvävgas är inert och torr.'},
+{q:'Oljespår vid en rörskarv tyder ofta på…',o:['Läckage','Korrekt montering','För hög överhettning','Fullt laddad kondensor'],a:0,t:'Visuell läcksökning',e:'Olja följer med köldmediet ut vid en läcka.'},
+{q:'Vad gör en HP-pressostat?',o:['Stoppar kompressorn vid för högt tryck','Startar kompressorn','Mäter överhettning','Fyller på olja'],a:0,t:'Skyddsfunktioner',e:'HP betyder högtryck.'},
+{q:'Bubblor i siktglaset i vätskeledningen kan tyda på…',o:['För lite köldmedium eller låg underkylning','Perfekt fyllning','För mycket olja','Ett rent filter'],a:0,t:'Tolkning av siktglas',e:'Ångbubblor i vätskan betyder att vätskan inte är helt kondenserad och underkyld.'},
+{q:'Vad innebär ett vakuumprov?',o:['Systemet evakueras och man kontrollerar att trycket inte stiger','Systemet fylls med syre','Oljenivån mäts','Kondensorn rengörs'],a:0,t:'Vakuumprov',e:'Stigande tryck tyder på läckage eller fukt.'},
+{q:'Vad kan en elektronisk läcksökare normalt påvisa?',o:['Spår av köldmedium i luften vid en läcka','Oljetrycket','Överhettningen','Elektrisk spänning'],a:0,t:'Elektronisk läcksökare',e:'Den reagerar på köldmediegas.'}],
+txt:[
+{q:'Beskriv hur du läcksöker en anläggning som tappar köldmedium. Nämn minst tre metoder eller steg.',need:3,
+ groups:[{l:'Visuell kontroll / oljespår',any:['visuell','oljespår','olja','titta']},{l:'Elektronisk läcksökare',any:['elektronisk','läcksökare']},{l:'Läcksökningsspray / tvålvatten',any:['spray','tvål','såpa','läcksökningsvätska']},{l:'Tryckprovning med kvävgas',any:['kväve','kvävgas']},{l:'Vakuumprov eller UV-färg',any:['vakuum','uv']}],
+ model:'Börja med visuell kontroll av oljespår. Använd elektronisk läcksökare och läcksökningsspray vid skarvar. Vid svårfunna läckor tryckprovas anläggningen med torr kvävgas, eller så görs ett vakuumprov eller används UV-färg.'},
+{q:'Vilka mätvärden bör du regelbundet övervaka och vad kan avvikelser betyda?',need:3,
+ groups:[{l:'Tryck (hög- och lågtryck)',any:['tryck']},{l:'Temperaturer',any:['temperatur']},{l:'Överhettning och underkylning',any:['överhett','underkyl']},{l:'Tolkning: läckage, smuts, igensatt filter, brist på köldmedium',any:['läck','smuts','igensatt','för lite','isbild','filter']}],
+ model:'Man övervakar hög- och lågtryck, temperaturer, överhettning och underkylning, oljenivå och siktglas. Avvikelser kan betyda läckage, för lite köldmedium, igensatt filter eller smutsig kondensor eller förångare.'}]});
+
+MODS.push({id:'m6',short:'Överhettning & egenkontroll',title:'Överhettning, underkylning och egenkontroll',
+intro:'Du lär dig mäta och tolka överhettning och underkylning och veta vad en egenkontroll av ett kyl- eller värmepumpsaggregat innehåller.',
+blocks:[
+{h:'Överhettning och underkylning',html:`<p><b>Överhettning (ÖH)</b> är hur många grader gasen är varmare än förångningstemperaturen vid sugtrycket. Den visar att allt köldmedium hunnit förångas innan kompressorn.</p><p class="mono">ÖH = sugledningstemperatur − förångningstemperatur</p>
+<p><b>Underkylning (UK)</b> är hur många grader vätskan är kallare än kondenseringstemperaturen. Den visar att vätskan är fri från bubblor före expansionsventilen.</p><p class="mono">UK = kondenseringstemperatur − vätsketemperatur</p>
+<p>Skillnader anges i kelvin (K). Riktvärden är ofta 5–10 K för överhettning och 3–8 K för underkylning, men följ alltid tillverkarens anvisningar.</p>
+<div class="note">För köldmedieblandningar med temperaturglid räknas överhettning från daggpunkten och underkylning från bubbelpunkten.</div>`},
+{h:'Så mäter du',html:`<ol class="steps"><li>Anslut manometer på lågtrycks- och högtryckssidan.</li><li>Läs av trycken och räkna om dem till mättnadstemperaturer med tryck-temperaturtabell eller app.</li><li>Mät temperatur på sugledningen nära förångarens utlopp och på vätskeledningen före expansionsventilen.</li><li>Räkna ÖH och UK enligt formlerna.</li></ol>`},
+{h:'Räkna själv',html:`__CALC__`},
+{h:'Tolka avvikelser',html:`<div class="tblwrap"><table><thead><tr><th>Värde</th><th>Möjliga orsaker</th></tr></thead><tbody>
+<tr><td>Hög ÖH</td><td>För lite köldmedium, igensatt filtertork eller vätskeledning, för stängd expansionsventil, stort tryckfall.</td></tr>
+<tr><td>Låg ÖH</td><td>För öppen eller felinställd expansionsventil, för mycket köldmedium, dålig luftgenomströmning. Risk för vätskeslag.</td></tr>
+<tr><td>Låg UK</td><td>För lite köldmedium (bubblor i siktglas), uppvärmd vätskeledning.</td></tr>
+<tr><td>Hög UK</td><td>För mycket köldmedium som fyller kondensorn med vätska.</td></tr></tbody></table></div>`},
+{h:'Egenkontroll av kyl- och värmepumpsaggregat',html:`<p>Verksamhetsutövare ska enligt miljöbalken och förordningen om egenkontroll (1998:901) känna till och kontrollera sin verksamhets miljöpåverkan. För en kylanläggning hör följande till rutinen:</p>
+<ul class="checklist"><li>Läs av hög- och lågtryck samt temperaturer.</li><li>Beräkna överhettning och underkylning.</li><li>Kontrollera oljenivå och siktglas.</li><li>Sök efter läckage och följ intervallen för läckagekontroll.</li><li>Rengör kondensor och förångare. Kontrollera filter och avfrostning.</li><li>Kontrollera larm och pressostater.</li><li>För driftjournal över kontroller, åtgärder och mängd köldmedium.</li></ul>`}],
+links:['skolverket','sfs901','nvstat'],
+calc:true,
+mcq:[
+{q:'Överhettning beräknas som…',o:['Sugledningstemperatur − förångningstemperatur','Kondenseringstemperatur − vätsketemperatur','Högtryck − lågtryck','Vätsketemperatur − sugledningstemperatur'],a:0,t:'Definition av överhettning',e:'Överhettning mäts vid förångarens utlopp.'},
+{q:'Underkylning beräknas som…',o:['Sugledningstemperatur − förångningstemperatur','Högtryck − lågtryck','Kondenseringstemperatur − vätsketemperatur före expansionsventilen','Vätsketemperatur − omgivningstemperatur'],a:2,t:'Definition av underkylning',e:'Underkylning mäts i vätskeledningen.'},
+{q:'Förångningstemperatur −10 °C och sugledningstemperatur −3 °C. Hur stor är överhettningen?',o:['3 K','7 K','13 K','−7 K'],a:1,t:'Beräkning av överhettning',e:'−3 − (−10) = 7 K.'},
+{q:'Kondenseringstemperatur 40 °C och vätsketemperatur 35 °C. Hur stor är underkylningen?',o:['5 K','35 K','75 K','−5 K'],a:0,t:'Beräkning av underkylning',e:'40 − 35 = 5 K.'},
+{q:'Vad riskerar man om överhettningen är nära 0 K?',o:['Dålig fyllning av förångaren','Vätskeslag i kompressorn','Att kompressorn blir för kall','Högre underkylning'],a:1,t:'Tolkning av låg överhettning',e:'Då kan vätska följa med in i kompressorn.'},
+{q:'Vilket av följande hör till regelbunden egenkontroll av ett kylaggregat?',o:['Kontrollera tryck, temperaturer, oljenivå och läckage och föra driftjournal','Bara städa lokalen','Byta köldmedium varje år','Endast läsa av elmätaren'],a:0,t:'Egenkontroll',e:'Egenkontrollen ska vara systematisk och dokumenteras.'},
+{q:'För en blandning med temperaturglid räknas överhettningen från…',o:['Bubbelpunkten vid sugtrycket','Daggpunkten (mättad ånga) vid sugtrycket','Medelvärdet av båda','Temperaturen i kondensorn'],a:1,t:'Temperaturglid',e:'Överhettning börjar där all vätska är förångad, alltså vid daggpunkten.'}],
+txt:[
+{q:'Förklara vad överhettning och underkylning är och hur de mäts.',need:3,
+ groups:[{l:'ÖH: sugledningstemp minus förångningstemp',any:['sugledning','förångningstemp','mättnad']},{l:'UK: kondenseringstemp minus vätsketemp',any:['vätsketemp','kondenseringstemp','vätskeledning']},{l:'Mäts med manometer och temperaturgivare',any:['manometer','tryckmätare','temperaturgivare','termometer','givare']}],
+ model:'Överhettning är sugledningens temperatur minus förångningstemperaturen. Underkylning är kondenseringstemperaturen minus vätskans temperatur. Man mäter tryck med manometer, räknar om till mättnadstemperatur och mäter ledningstemperaturerna med givare.'},
+{q:'Vad kan det bero på om överhettningen är för hög?',need:2,
+ groups:[{l:'För lite köldmedium',any:['för lite','låg fyllning','brist']},{l:'Igensatt filtertork eller ventil',any:['igensatt','filtertork','smuts']},{l:'Felinställd eller för stängd expansionsventil',any:['inställ','justera','termostatisk','expansionsventil']},{l:'Stort tryckfall',any:['tryckfall']}],
+ model:'Hög överhettning kan bero på för lite köldmedium, igensatt filtertork eller vätskeledning, felinställd expansionsventil eller stort tryckfall.'}]});
+
+const FINAL={pass:70,
+mcq:[
+{m:'m1',q:'Vilket system har köldbärare på både kalla och varma sidan?',o:['Direkt system','Delvis indirekt system','Fullständigt indirekt system','Inget av dem'],a:2,t:'Fullständigt indirekta system',e:'Köldbärare finns på båda sidor.'},
+{m:'m1',q:'Vilken komponent höjer köldmediets tryck och temperatur och driver cirkulationen?',o:['Förångaren','Kompressorn','Filtertorken','Siktglaset'],a:1,t:'Kylprocessens ordning',e:'Kompressorn komprimerar gasen.'},
+{m:'m2',q:'När bildas syra i ett kylsystem?',o:['När fukt, köldmedium och olja reagerar','När systemet är för kallt','När filtertorken är ny','När manometern är ansluten'],a:0,t:'Fukt och syrabildning',e:'Fukt orsakar syrabildning och korrosion.'},
+{m:'m2',q:'Varför monteras vibrationsdämpare?',o:['För att minska mekanisk påverkan på rör och utrustning','För att höja trycket','För att mäta temperatur','För att filtrera köldmediet'],a:0,t:'Vibrationer och rörupphängning',e:'Vibrationer ger utmattning och rörbrott.'},
+{m:'m3',q:'En anläggning har 100 kg köldmedium med GWP 1500. Hur många ton CO₂e är det?',o:['15 ton','150 ton','1 500 ton','150 000 ton'],a:1,t:'Beräkning av CO₂e',e:'100 × 1500 ÷ 1000 = 150 ton.'},
+{m:'m3',q:'Vad är en fördel med naturliga köldmedier som koldioxid och propan?',o:['Låg eller ingen klimatpåverkan (GWP)','De är alltid ofarliga','De bryter ned ozonskiktet','De kräver ingen certifiering'],a:0,t:'Naturliga köldmedier',e:'Naturliga köldmedier har låg GWP, men kan vara brandfarliga eller giftiga.'},
+{m:'m4',q:'Vilken säkerhetsutrustning är särskilt viktig i ett maskinrum med ammoniak?',o:['Gasdetektor och ventilation','Kopparrör','Elvärme','Extra belysning'],a:0,t:'Hantering av ammoniak',e:'Ammoniak är giftig och kräver detektion.'},
+{m:'m4',q:'Vad gör du innan du hanterar en ny kemisk produkt, till exempel kylmaskinolja?',o:['Läser säkerhetsdatabladet','Provar försiktigt','Frågar grannen','Ingenting'],a:0,t:'Säkerhetsdatablad',e:'Databladet beskriver faror och skydd.'},
+{m:'m5',q:'Varför får man inte trycksätta med syre vid läcksökning?',o:['Syre och olja under tryck kan ge brand eller explosion','Syre är för dyrt','Syre ger sämre mätning','Syre är giftigt'],a:0,t:'Säker tryckprovning',e:'Använd torr kvävgas.'},
+{m:'m5',q:'Vad gör en LP-pressostat?',o:['Stoppar kompressorn vid för lågt sugtryck','Stoppar kompressorn vid för högt tryck','Mäter överhettning','Fyller på köldmedium'],a:0,t:'Skyddsfunktioner',e:'LP betyder lågtryck.'},
+{m:'m6',q:'Förångningstemperatur −8 °C och sugledningstemperatur −2 °C. Hur stor är överhettningen?',o:['10 K','6 K','−6 K','2 K'],a:1,t:'Beräkning av överhettning',e:'−2 − (−8) = 6 K.'},
+{m:'m6',q:'Kondenseringstemperatur 45 °C och vätsketemperatur 38 °C. Hur stor är underkylningen?',o:['83 K','7 K','−7 K','38 K'],a:1,t:'Beräkning av underkylning',e:'45 − 38 = 7 K.'}],
+txt:[
+{m:'m1',q:'Beskriv kylprocessens fyra steg och vad som händer med köldmediet i varje steg.',need:3,
+ groups:[{l:'Kompression',any:['kompress']},{l:'Kondensering',any:['kondens']},{l:'Expansion',any:['expansion','strypning','trycksänk']},{l:'Förångning',any:['förång']}],
+ model:'Kompression: gasen får högre tryck och temperatur. Kondensering: gasen avger värme och blir vätska. Expansion: trycket sänks. Förångning: vätskan tar upp värme och blir gas.'},
+{m:'m3',q:'Vilka krav gäller den som utför service eller läckagekontroll på utrustning med F-gaser, och vad ska operatören dokumentera?',need:2,
+ groups:[{l:'Personcertifiering',any:['certifier']},{l:'Journal eller register',any:['journal','register','dokument']},{l:'Återvinning och inga utsläpp',any:['återvin','tappa','utsläpp']}],
+ model:'Den som utför arbetet ska vara personcertifierad. Operatören ska föra journal eller register över köldmedium, påfyllning, återvinning och läckagekontroller. Köldmedium ska återvinnas och inte släppas ut.'}]};
+</script>
+<script>
+'use strict';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={};
+try{S=JSON.parse(localStorage.getItem('kylkurs-v1'))||{}}catch(e){S={}}
+S.mods=S.mods||{};S.fin=S.fin||{mcq:[],txt:[],res:null};
+const save=()=>{try{localStorage.setItem('kylkurs-v1',JSON.stringify(S))}catch(e){}};
+const ms=id=>S.mods[id]||(S.mods[id]={mcq:[],txt:[],draw:{nodes:[],edges:[]},res:null});
+const modById=id=>MODS.find(m=>m.id===id);
+
+/* ---------- Rättning ---------- */
+function gradeText(q,ans){
+  const t=' '+String(ans||'').toLowerCase()+' ';
+  const hit=[],missing=[];
+  q.groups.forEach(g=>{(g.any.some(k=>t.includes(k))?hit:missing).push(g.l)});
+  let p=0;
+  if(t.trim().length>0){p=hit.length>=q.need?2:(hit.length>=Math.ceil(q.need/2)&&hit.length>0?1:0)}
+  return{p,hit,missing};
+}
+function gradeDraw(task,d){
+  const have=new Set(d.nodes.map(n=>n.n));
+  const notes=[];
+  const missingNodes=task.nodes.filter(n=>!have.has(n));
+  const extraNodes=[...have].filter(n=>!task.nodes.includes(n));
+  const se=new Set(d.edges.map(e=>e[0]+'>'+e[1]));
+  let best=null;
+  task.alts.forEach(alt=>{
+    const ak=new Set(alt.map(e=>e[0]+'>'+e[1]));
+    const ok=[...se].filter(k=>ak.has(k)).length;
+    const wrong=[...se].filter(k=>!ak.has(k));
+    const score=Math.max(0,ok-0.5*wrong.length)/alt.length;
+    if(!best||score>best.score)best={score,ak,ok,wrong,alt};
+  });
+  let ratio=best.score-0.1*extraNodes.length-0.05*missingNodes.length;
+  ratio=Math.max(0,Math.min(1,ratio));
+  const points=Math.round(ratio*4);
+  if(missingNodes.length)notes.push('Saknade komponenter: '+missingNodes.join(', ')+'.');
+  if(extraNodes.length)notes.push('Komponenter som inte hör hemma i systemet: '+extraNodes.join(', ')+'.');
+  const missingPipes=best.alt.filter(e=>!se.has(e[0]+'>'+e[1]));
+  const reversed=[],other=[];
+  best.wrong.forEach(k=>{const [a,b]=k.split('>');(best.ak.has(b+'>'+a)?reversed:other).push(a+' → '+b)});
+  const trulyMissing=missingPipes.filter(e=>!se.has(e[1]+'>'+e[0]));
+  if(reversed.length)notes.push('Fel flödesriktning på: '+reversed.join('; ')+'.');
+  if(trulyMissing.length)notes.push('Saknade rör: '+trulyMissing.map(e=>e[0]+' → '+e[1]).join('; ')+'.');
+  if(other.length)notes.push('Rör som inte hör hemma: '+other.join('; ')+'.');
+  if(!notes.length)notes.push('Schemat är helt rätt.');
+  return{p:points,max:4,notes};
+}
+function gradeModule(m){
+  const st=ms(m.id);
+  const res={mcq:{c:0,t:m.mcq.length,wrong:[]},txt:{p:0,t:m.txt.length*2,items:[]},draw:null};
+  m.mcq.forEach((q,i)=>{if(st.mcq[i]===q.a)res.mcq.c++;else res.mcq.wrong.push(q.t)});
+  m.txt.forEach((q,i)=>{const r=gradeText(q,st.txt[i]);res.txt.p+=r.p;res.txt.items.push(r)});
+  if(m.draw)res.draw=gradeDraw(DRAW[m.draw],st.draw);
+  st.res=res;save();
+}
+function pct(res){
+  const got=res.mcq.c+res.txt.p+(res.draw?res.draw.p:0);
+  const tot=res.mcq.t+res.txt.t+(res.draw?res.draw.max:0);
+  return Math.round(100*got/tot);
+}
+function lvl(p){return p>=85?['Stark','lv-good']:p>=70?['Godkänd','lv-ok']:['Repetera','lv-low']}
+function gradeFinal(){
+  const f=S.fin;const by={};MODS.forEach(m=>by[m.id]={c:0,t:0,topics:[],miss:[]});
+  FINAL.mcq.forEach((q,i)=>{const b=by[q.m];b.t++;if(f.mcq[i]===q.a)b.c++;else b.topics.push(q.t)});
+  const items=[];
+  FINAL.txt.forEach((q,i)=>{const r=gradeText(q,f.txt[i]);const b=by[q.m];b.t+=2;b.c+=r.p;b.miss.push(...r.missing);items.push(r)});
+  let c=0,t=0;Object.values(by).forEach(b=>{c+=b.c;t+=b.t});
+  f.res={by,items,pct:Math.round(100*c/t)};save();
+}
+
+/* ---------- Ritverktyg ---------- */
+const NW=132,NH=44,VW=720,VH=400;
+function mountDraw(host,key,st,locked){
+  const T=DRAW[key],D=st.draw,pre='dr-'+key+'-';
+  let mode='move',sel=null,pend=null,drag=null;
+  const names=T.nodes.concat(T.extra);
+  host.innerHTML=`<div class="dtools" role="toolbar" aria-label="Ritverktyg">
+    <div class="grp" id="${pre}pal"></div>
+    <div class="grp"><button type="button" class="btn alt sm" id="${pre}mv" aria-pressed="true">Flytta</button><button type="button" class="btn alt sm" id="${pre}pp" aria-pressed="false">Rita rör</button></div>
+    <div class="grp"><button type="button" class="btn alt sm" id="${pre}del">Ta bort markerad</button><button type="button" class="btn alt sm" id="${pre}undo">Ångra rör</button><button type="button" class="btn alt sm" id="${pre}clr">Rensa allt</button></div></div>
+  <p class="dhint" id="${pre}hint" aria-live="polite"></p>
+  <svg class="canvas" viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Rityta för kopplingsschema" id="${pre}svg"><g id="${pre}g"></g></svg>
+  <div class="pipeform"><span>Alternativ utan mus:</span>
+    <label for="${pre}from">Från</label><select id="${pre}from"></select>
+    <label for="${pre}to">Till</label><select id="${pre}to"></select>
+    <button type="button" class="btn alt sm" id="${pre}add">Lägg till rör</button></div>`;
+  const $=id=>host.querySelector('#'+pre+id);
+  const svg=$('svg'),g=$('g');
+  const byName=()=>Object.fromEntries(D.nodes.map(n=>[n.n,n]));
+  function pt(e){const r=svg.getBoundingClientRect();return{x:(e.clientX-r.left)*VW/r.width,y:(e.clientY-r.top)*VH/r.height}}
+  function edgePts(a,b,off){
+    const ax=a.x+NW/2,ay=a.y+NH/2,bx=b.x+NW/2,by=b.y+NH/2;
+    let dx=bx-ax,dy=by-ay;const len=Math.hypot(dx,dy)||1;
+    const cut=(w,h)=>{const tx=dx?(w/2)/Math.abs(dx):1e9,ty=dy?(h/2)/Math.abs(dy):1e9;return Math.min(tx,ty)};
+    const ca=cut(NW,NH),cb=cut(NW+8,NH+8);
+    const nx=-dy/len*off,ny=dx/len*off;
+    return[ax+dx*ca+nx,ay+dy*ca+ny,bx-dx*cb+nx,by-dy*cb+ny];
+  }
+  function paint(){
+    const bn=byName();let h='';
+    for(let x=40;x<VW;x+=40)h+=`<line class="gridl" x1="${x}" y1="0" x2="${x}" y2="${VH}"/>`;
+    h+=`<defs><marker id="${pre}a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker><marker id="${pre}a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah2" d="M0 0L10 5L0 10z"/></marker></defs>`;
+    D.edges.forEach(([a,b])=>{
+      const A=bn[a],B=bn[b];if(!A||!B)return;
+      const rev=D.edges.some(e=>e[0]===b&&e[1]===a);
+      const p=edgePts(A,B,rev?6:0),k=a+'>'+b,s=sel&&sel.t==='e'&&sel.k===k;
+      h+=`<g data-edge="${esc(k)}"><line class="hit" x1="${p[0]}" y1="${p[1]}" x2="${p[2]}" y2="${p[3]}"/><line class="pipe${s?' sel':''}" x1="${p[0]}" y1="${p[1]}" x2="${p[2]}" y2="${p[3]}" marker-end="url(#${pre}${s?'a2':'a1'})"/></g>`;
+    });
+    D.nodes.forEach(n=>{
+      const s=sel&&sel.t==='n'&&sel.k===n.n,pd=pend===n.n;
+      h+=`<g data-node="${esc(n.n)}" transform="translate(${n.x} ${n.y})" style="cursor:${locked?'default':mode==='pipe'?'crosshair':'grab'}"><rect class="node${s?' sel':''}${pd?' pend':''}" width="${NW}" height="${NH}" rx="6"/><text x="${NW/2}" y="${NH/2+5}" text-anchor="middle">${esc(n.n)}</text></g>`;
+    });
+    g.innerHTML=h;
+    // palett
+    const placed=new Set(D.nodes.map(n=>n.n));
+    $('pal').innerHTML=names.map(n=>`<button type="button" class="btn alt sm" data-add="${esc(n)}" ${placed.has(n)||locked?'disabled':''}>+ ${esc(n)}</button>`).join('');
+    const opts=D.nodes.map(n=>`<option>${esc(n.n)}</option>`).join('');
+    const f=$('from'),t=$('to'),fv=f.value,tv=t.value;f.innerHTML=opts;t.innerHTML=opts;
+    if(fv)f.value=fv;if(tv)t.value=tv;
+    $('mv').setAttribute('aria-pressed',mode==='move');$('pp').setAttribute('aria-pressed',mode==='pipe');
+    $('mv').style.background=mode==='move'?'var(--soft)':'transparent';$('pp').style.background=mode==='pipe'?'var(--soft)':'transparent';
+    host.querySelectorAll('.dtools button,.pipeform button,.pipeform select').forEach(b=>{if(locked)b.disabled=true});
+    $('hint').textContent=locked?'Rättat. Välj Gör om delen för att rita på nytt.':mode==='pipe'?(pend?'Klicka på komponenten som röret ska gå till. Klicka på samma igen för att avbryta.':'Klicka på komponenten som röret ska börja vid.'):'Lägg till komponenter, dra dem på plats och välj sedan Rita rör.';
+  }
+  function addEdge(a,b){if(a===b||D.edges.some(e=>e[0]===a&&e[1]===b))return;D.edges.push([a,b]);save()}
+  svg.addEventListener('pointerdown',e=>{
+    if(locked)return;
+    const ng=e.target.closest('[data-node]'),eg=e.target.closest('[data-edge]');
+    if(ng){
+      const name=ng.dataset.node;
+      if(mode==='pipe'){if(!pend)pend=name;else if(pend===name)pend=null;else{addEdge(pend,name);pend=null}sel=null;paint();return}
+      sel={t:'n',k:name};const p=pt(e),n=byName()[name];drag={name,dx:p.x-n.x,dy:p.y-n.y};
+      try{svg.setPointerCapture(e.pointerId)}catch(x){}
+      paint();
+    }else if(eg&&mode==='move'){sel={t:'e',k:eg.dataset.edge};paint()}
+    else{sel=null;pend=null;paint()}
+  });
+  svg.addEventListener('pointermove',e=>{
+    if(!drag)return;const p=pt(e),n=byName()[drag.name];if(!n)return;
+    n.x=Math.max(0,Math.min(VW-NW,p.x-drag.dx));n.y=Math.max(0,Math.min(VH-NH,p.y-drag.dy));paint();
+  });
+  const end=()=>{if(drag){drag=null;save()}};
+  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+  host.addEventListener('click',e=>{
+    if(locked)return;
+    const add=e.target.closest('[data-add]');
+    if(add){const n=add.dataset.add,c=D.nodes.length;D.nodes.push({n,x:40+(c%3)*252,y:30+Math.floor(c/3)*110});sel={t:'n',k:n};save();paint();return}
+    const id=e.target.id||'';
+    if(id===pre+'mv'){mode='move';pend=null;paint()}
+    else if(id===pre+'pp'){mode='pipe';sel=null;paint()}
+    else if(id===pre+'undo'){D.edges.pop();save();paint()}
+    else if(id===pre+'clr'){D.nodes.length=0;D.edges.length=0;sel=null;pend=null;save();paint()}
+    else if(id===pre+'del'&&sel){
+      if(sel.t==='n'){D.nodes.splice(D.nodes.findIndex(n=>n.n===sel.k),1);for(let i=D.edges.length-1;i>=0;i--)if(D.edges[i][0]===sel.k||D.edges[i][1]===sel.k)D.edges.splice(i,1)}
+      else{const [a,b]=sel.k.split('>');const i=D.edges.findIndex(x=>x[0]===a&&x[1]===b);if(i>=0)D.edges.splice(i,1)}
+      sel=null;save();paint();
+    }
+    else if(id===pre+'add'){addEdge($('from').value,$('to').value);paint()}
+  });
+  paint();
+}
+</script>
+<script>
+'use strict';
+const main=document.getElementById('main'),nav=document.getElementById('nav');
+const bar=p=>`<div class="bar" role="img" aria-label="${p} procent"><span style="width:${p}%"></span></div>`;
+const doneCount=()=>MODS.filter(m=>ms(m.id).res).length;
+const linksHTML=ids=>`<section class="sources"><h2>Läs vidare i källorna</h2><ul>${ids.map(i=>`<li><a href="${esc(L[i].u)}" target="_blank" rel="noopener">${esc(L[i].t)}</a><span>${esc(L[i].d)}</span></li>`).join('')}</ul></section>`;
+
+function paintChrome(route){
+  const n=doneCount(),tot=MODS.length+1,fin=S.fin.res?1:0;
+  const p=Math.round(100*(n+fin)/tot);
+  document.getElementById('progtxt').textContent=(n+fin)+' av '+tot+' klara';
+  document.querySelector('#progbar span').style.width=p+'%';
+  const a=(h,t,r)=>`<a href="#${h}" ${route===h?'aria-current="page"':''}><span>${t}</span><span class="pc">${r||''}</span></a>`;
+  nav.innerHTML=a('start','Start')+'<div class="sep"></div>'+MODS.map((m,i)=>{const r=ms(m.id).res;return a('del'+(i+1),'Del '+(i+1)+' '+esc(m.short),r?pct(r)+' %':'')}).join('')+'<div class="sep"></div>'+a('resultat','Mina resultat')+a('slutprov','Slutprov',S.fin.res?S.fin.res.pct+' %':'');
+}
+
+function viewStart(){
+  main.innerHTML=`<p class="eyebrow">Kurs</p><h1>Kyl- och värmepumpsteknik</h1>
+  <p class="lead">Kursen följer kylsystemets uppbyggnad och funktion, köldmedier och miljö, arbetsmiljö, driftövervakning, läcksökning samt mätning av överhettning och underkylning. Texterna länkar till svenska myndigheter, branschorganisationer och EU:s regelverk.</p>
+  <h2>Så går det till</h2>
+  <ol class="steps"><li>Läs delens text och öppna källorna för fördjupning.</li><li>Svara på kryssfrågor och textfrågor. Rita schemat där det finns en ritövning.</li><li>Klicka på Rätta delen. Rättningen sker direkt och du ser vad som saknas.</li><li>Under Mina resultat får du en analys av vad du behöver repetera.</li><li>När du är redo gör du slutprovet.</li></ol>
+  <h2>Kursdelar</h2>
+  <div class="cards">${MODS.map((m,i)=>{const r=ms(m.id).res;return `<a class="card" href="#del${i+1}"><span class="eyebrow">Del ${i+1}</span><b>${esc(m.title)}</b><span>${r?'Klar, '+pct(r)+' %':'Inte påbörjad eller inte rättad'}</span></a>`}).join('')}</div>
+  <div class="note warn">Svaren sparas i din webbläsare på den här enheten. Länkarna går till externa sidor och kan ändras över tid. Kontrollera dem och kursens facit mot din kursplan.</div>`;
+}
+
+function mcqHTML(prefix,qs,answers,graded,start){
+  return qs.map((q,i)=>{
+    const a=answers[i],ok=a===q.a;
+    return `<fieldset class="q"><legend><span class="qn">Fråga ${i+1+(start||0)}</span>${esc(q.q)}</legend>${q.o.map((o,j)=>{
+      const cls=graded?(j===q.a?' right':(j===a?' wrong':'')):'';
+      return `<label class="opt${cls}" for="${prefix}q${i}o${j}"><input type="radio" id="${prefix}q${i}o${j}" name="${prefix}q${i}" value="${j}" data-q="${i}" ${a===j?'checked':''} ${graded?'disabled':''}><span>${esc(o)}</span></label>`}).join('')}
+    ${graded?`<p class="fb ${ok?'good':'bad'}"><b>${ok?'Rätt.':(a==null?'Obesvarad.':'Fel.')}</b> ${esc(q.e)}</p>`:''}</fieldset>`}).join('');
+}
+function txtHTML(prefix,qs,answers,items){
+  return qs.map((q,i)=>{
+    const r=items&&items[i];
+    return `<div class="tq"><label for="${prefix}t${i}">${esc(q.q)}</label><textarea id="${prefix}t${i}" rows="5" data-t="${i}" ${r?'disabled':''}>${esc(answers[i]||'')}</textarea>
+    ${r?`<p class="fb ${r.p===2?'good':'bad'}"><b>${r.p} av 2 poäng.</b></p><div class="chips">${r.hit.map(x=>`<span class="chip ok">Med: ${esc(x)}</span>`).join('')}${r.missing.map(x=>`<span class="chip no">Saknas: ${esc(x)}</span>`).join('')}</div><details><summary>Visa exempelsvar</summary><p>${esc(q.model)}</p></details><p class="dhint">Rättningen letar efter nyckelbegrepp. Ett svar med andra ord kan vara rätt, jämför med exempelsvaret.</p>`:''}</div>`}).join('');
+}
+function calcHTML(){
+  const f=(id,l,v)=>`<div><label for="${id}">${l}</label><input type="number" id="${id}" value="${v}" step="0.5"></div>`;
+  return `<div class="calc"><p>Skriv in temperaturer (°C) som du räknat fram ur trycken.</p><div class="calc-grid">${f('c-ev','Förångningstemperatur',-10)}${f('c-su','Sugledningstemperatur',-3)}${f('c-co','Kondenseringstemperatur',40)}${f('c-vl','Vätsketemperatur',35)}</div><output id="c-out" aria-live="polite"></output></div>`;
+}
+function wireCalc(){
+  const g=id=>parseFloat(document.getElementById(id).value),out=document.getElementById('c-out');
+  if(!out)return;
+  const run=()=>{
+    const oh=g('c-su')-g('c-ev'),uk=g('c-co')-g('c-vl');
+    const a=isNaN(oh)?'–':oh<3?'mycket lågt, risk för vätskeslag':oh<5?'lågt':oh<=10?'inom riktvärdet':'högt';
+    const b=isNaN(uk)?'–':uk<3?'lågt':uk<=8?'inom riktvärdet':'högt';
+    out.innerHTML=`Överhettning: ${isNaN(oh)?'–':oh.toFixed(1)} K (${a})<br>Underkylning: ${isNaN(uk)?'–':uk.toFixed(1)} K (${b})<br><small>Riktvärden. Följ tillverkarens anvisningar.</small>`;
+  };
+  document.querySelectorAll('.calc input').forEach(i=>i.addEventListener('input',run));run();
+}
+
+function viewModule(i){
+  const m=MODS[i],st=ms(m.id),res=st.res,graded=!!res;
+  main.innerHTML=`<p class="eyebrow">Del ${i+1} av ${MODS.length}</p><h1>${esc(m.title)}</h1><p class="lead">${esc(m.intro)}</p>
+  ${m.blocks.map(b=>`<section><h2>${esc(b.h)}</h2>${b.html==='__CALC__'?calcHTML():b.html}</section>`).join('')}
+  ${linksHTML(m.links)}
+  <section><h2>Kryssfrågor</h2>${mcqHTML(m.id,m.mcq,st.mcq,graded)}</section>
+  <section><h2>Textfrågor</h2>${txtHTML(m.id,m.txt,st.txt,res&&res.txt.items)}</section>
+  ${m.draw?`<section><h2>${esc(DRAW[m.draw].title)}</h2><p>${esc(DRAW[m.draw].brief)}</p><div id="drawhost"></div>${res&&res.draw?`<div class="fb ${res.draw.p>=3?'good':'bad'}"><b>Ritövning: ${res.draw.p} av ${res.draw.max} poäng.</b><ul>${res.draw.notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>`:''}</section>`:''}
+  <div class="submitbar">${graded?`<button class="btn alt" id="redo" type="button">Gör om delen</button>`:`<button class="btn" id="grade" type="button">Rätta delen</button>`}</div>
+  ${graded?`<div class="sumbox" id="sum"><p class="eyebrow">Resultat för delen</p><div class="big">${pct(res)} %</div><p>Kryssfrågor ${res.mcq.c} av ${res.mcq.t}. Textfrågor ${res.txt.p} av ${res.txt.t}.${res.draw?` Ritövning ${res.draw.p} av ${res.draw.max}.`:''}</p><div class="submitbar"><a class="btn" href="#${i<MODS.length-1?'del'+(i+2):'resultat'}">${i<MODS.length-1?'Gå till nästa del':'Se mina resultat'}</a><a class="btn alt" href="#resultat">Mina resultat</a></div></div>`:''}`;
+  if(m.calc)wireCalc();
+  if(m.draw)mountDraw(document.getElementById('drawhost'),m.draw,st,graded);
+  main.onchange=e=>{const q=e.target.dataset&&e.target.dataset.q;if(q!=null){st.mcq[+q]=+e.target.value;save()}};
+  main.oninput=e=>{const t=e.target.dataset&&e.target.dataset.t;if(t!=null){st.txt[+t]=e.target.value;save()}};
+  const gb=document.getElementById('grade');
+  if(gb)gb.onclick=()=>{gradeModule(m);route(true);const s=document.getElementById('sum');if(s)s.scrollIntoView({behavior:'smooth',block:'start'})};
+  const rb=document.getElementById('redo');
+  if(rb)rb.onclick=()=>{if(rb.dataset.arm){S.mods[m.id]=null;delete S.mods[m.id];save();route()}else{rb.dataset.arm='1';rb.textContent='Klicka igen för att rensa dina svar'}};
+}
+
+function improveList(){
+  const out=[];
+  MODS.forEach((m,i)=>{
+    const r=ms(m.id).res;if(!r)return;const p=pct(r);if(p>=85)return;
+    const bits=[];
+    if(r.mcq.wrong.length)bits.push('Kryssfrågor att repetera: '+[...new Set(r.mcq.wrong)].join(', ')+'.');
+    const miss=[].concat(...r.txt.items.map(x=>x.missing));
+    if(miss.length)bits.push('Begrepp som saknades i textsvaren: '+miss.join('; ')+'.');
+    if(r.draw&&r.draw.p<4)bits.push('Ritövning: '+r.draw.notes.join(' '));
+    out.push({i,m,p,bits});
+  });
+  return out;
+}
+function viewResults(){
+  const done=MODS.filter(m=>ms(m.id).res);
+  if(!done.length){main.innerHTML=`<p class="eyebrow">Resultat</p><h1>Mina resultat</h1><p class="lead">Här visas dina resultat när du har rättat minst en del.</p><a class="btn" href="#del1">Börja med del 1</a>`;return}
+  const avg=Math.round(done.reduce((s,m)=>s+pct(ms(m.id).res),0)/done.length);
+  const imp=improveList();
+  const all=done.length===MODS.length;
+  main.innerHTML=`<p class="eyebrow">Resultat</p><h1>Mina resultat</h1>
+  <div class="sumbox"><p class="eyebrow">Genomsnitt över ${done.length} av ${MODS.length} delar</p><div class="big">${avg} %</div>${bar(avg)}</div>
+  <h2>Per del</h2>${MODS.map((m,i)=>{const r=ms(m.id).res;if(!r)return `<div class="rrow"><a href="#del${i+1}">Del ${i+1} ${esc(m.short)}</a><span class="st">Ej rättad</span><span></span></div>`;const p=pct(r),l=lvl(p);
+    return `<div class="rrow"><a href="#del${i+1}">Del ${i+1} ${esc(m.short)}</a><span class="st">Kryss ${r.mcq.c}/${r.mcq.t} · Text ${r.txt.p}/${r.txt.t}${r.draw?` · Rita ${r.draw.p}/${r.draw.max}`:''}</span><span class="lv ${l[1]}">${l[0]} ${p} %</span>${bar(p)}</div>`}).join('')}
+  <h2>Det här bör du förbättra</h2>
+  ${imp.length?imp.sort((a,b)=>a.p-b.p).map(x=>`<div class="imp"><b>Del ${x.i+1} ${esc(x.m.short)} (${x.p} %)</b><ul>${x.bits.map(b=>`<li>${esc(b)}</li>`).join('')||'<li>Läs igenom delen en gång till.</li>'}</ul><a href="#del${x.i+1}">Gå till delen</a></div>`).join(''):'<p>Inget att förbättra bland de delar du rättat. Alla ligger på 85 % eller mer.</p>'}
+  <h2>Nästa steg</h2>
+  <p>${!all?'Gör klart de delar som saknas innan slutprovet.':avg>=FINAL.pass&&!imp.some(x=>x.p<FINAL.pass)?'Du ligger bra till. Du kan gå vidare till slutprovet.':'Repetera delarna med lägst resultat och gör om dem innan slutprovet.'}</p>
+  <a class="btn" href="#slutprov">Till slutprovet</a>`;
+}
+
+function viewFinal(){
+  const f=S.fin,res=f.res,graded=!!res,left=MODS.filter(m=>!ms(m.id).res);
+  main.innerHTML=`<p class="eyebrow">Slutprov</p><h1>Slutprov</h1><p class="lead">${FINAL.mcq.length} kryssfrågor och ${FINAL.txt.length} textfrågor från alla delar. Gräns för godkänt: ${FINAL.pass} %.</p>
+  ${left.length&&!graded?`<div class="note warn">Du har inte rättat ${left.length===1?'del':'delar'} ${left.map(m=>MODS.indexOf(m)+1).join(', ')} än. Det rekommenderas att göra alla delar före slutprovet.</div>`:''}
+  <h2>Kryssfrågor</h2>${mcqHTML('f',FINAL.mcq,f.mcq,graded)}
+  <h2>Textfrågor</h2>${txtHTML('f',FINAL.txt,f.txt,res&&res.items)}
+  <div class="submitbar">${graded?`<button class="btn alt" id="fredo" type="button">Gör om slutprovet</button>`:`<button class="btn" id="fgrade" type="button">Rätta slutprovet</button>`}</div>
+  ${graded?finalSummary(res):''}`;
+  main.onchange=e=>{const q=e.target.dataset&&e.target.dataset.q;if(q!=null){f.mcq[+q]=+e.target.value;save()}};
+  main.oninput=e=>{const t=e.target.dataset&&e.target.dataset.t;if(t!=null){f.txt[+t]=e.target.value;save()}};
+  const gb=document.getElementById('fgrade');
+  if(gb)gb.onclick=()=>{gradeFinal();route(true);const s=document.getElementById('fsum');if(s)s.scrollIntoView({behavior:'smooth',block:'start'})};
+  const rb=document.getElementById('fredo');
+  if(rb)rb.onclick=()=>{if(rb.dataset.arm){S.fin={mcq:[],txt:[],res:null};save();route()}else{rb.dataset.arm='1';rb.textContent='Klicka igen för att rensa dina svar'}};
+}
+function finalSummary(res){
+  const ok=res.pct>=FINAL.pass;
+  return `<div class="sumbox" id="fsum"><p class="eyebrow">Resultat</p><div class="big">${res.pct} % · ${ok?'Godkänt':'Inte godkänt än'}</div>${bar(res.pct)}
+  <h3>Per kursdel</h3>${MODS.map((m,i)=>{const b=res.by[m.id];if(!b.t)return '';const p=Math.round(100*b.c/b.t),l=lvl(p);
+    const todo=[...new Set(b.topics)].concat(b.miss);
+    return `<div class="rrow"><a href="#del${i+1}">Del ${i+1} ${esc(m.short)}</a><span class="st">${b.c} av ${b.t} poäng</span><span class="lv ${l[1]}">${l[0]} ${p} %</span>${bar(p)}${todo.length?`<p class="dhint" style="grid-column:1/-1">Repetera: ${esc(todo.join('; '))}</p>`:''}</div>`}).join('')}
+  <p>${ok?'Bra jobbat. Delarna med lägst resultat är värda en repetition.':'Repetera delarna med lägst resultat och gör sedan om slutprovet.'}</p></div>`;
+}
+
+let cur=null;
+function route(keep){
+  const h=(location.hash||'#start').slice(1);
+  const mm=/^del([1-9])$/.exec(h);
+  let r='start';
+  if(mm&&MODS[+mm[1]-1])r=h;else if(h==='resultat'||h==='slutprov')r=h;
+  const fresh=r!==cur;cur=r;
+  const y=window.scrollY;
+  if(r==='start')viewStart();else if(r==='resultat')viewResults();else if(r==='slutprov')viewFinal();else viewModule(+r.slice(3)-1);
+  paintChrome(r);
+  if(fresh)window.scrollTo(0,0);else if(keep)window.scrollTo(0,y);
+}
+window.addEventListener('hashchange',()=>route());
+document.getElementById('theme').addEventListener('click',()=>{
+  const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  d.dataset.theme=dark?'light':'dark';
+});
+route();
+</script>
