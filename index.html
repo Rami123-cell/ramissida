@@ -186,12 +186,13 @@ mcq:[
 {q:'Vad används som köldbärare i ett indirekt system?',o:['Smörjolja','Kvävgas','Köldmedium R404A','Vatten med glykol'],a:3,t:'Köldbärare',e:'Vatten med glykol är vanligt eftersom det inte fryser.'},
 {q:'Vad är en nackdel med ett indirekt system?',o:['Det ger sämre arbetsmiljö','Det behöver extra värmeväxlare och pump','Det kan inte kyla alls','Det kräver mer köldmedium'],a:1,t:'Nackdelar med indirekta system',e:'Extra värmeväxlare och pump ger energiförluster.'}],
 txt:[
-{q:'Förklara skillnaden mellan ett direkt och ett fullständigt indirekt system och ge en fördel med vardera.',need:3,
- groups:[{l:'Direkt: förångar direkt i det som kyls',any:['direkt']},{l:'Indirekt: köldbärare (glykol, brine)',any:['köldbärare','glykol','brine','sekundär']},{l:'Fördel direkt: enklare / högre verkningsgrad',any:['enklare','färre komponenter','högre verkningsgrad','bättre verkningsgrad','effektivare']},{l:'Fördel indirekt: mindre köldmedium / säkrare',any:['mindre köldmedi','mindre mängd','läckage','maskinrum','säkerhet','säkrare']}],
- model:'I ett direkt system förångas köldmediet direkt i förångaren i det som ska kylas. Fördelen är färre komponenter och högre verkningsgrad. I ett fullständigt indirekt system överförs värmen via en köldbärare på både kalla och varma sidan. Fördelen är att mängden köldmedium blir liten och kan hållas i ett maskinrum.'},
-{q:'Varför väljer man ofta ett indirekt system när köldmediet är brandfarligt eller giftigt?',need:2,
- groups:[{l:'Mindre mängd köldmedium',any:['mindre','begränsa','litet','liten']},{l:'Aggregatet placeras i maskinrum eller utomhus',any:['maskinrum','utomhus','separat','utanför']},{l:'Köldbärare (vatten/glykol) i lokalerna',any:['köldbärare','vatten','glykol']}],
- model:'Då kan köldmediet hållas i ett litet aggregat i ett maskinrum eller utomhus, medan en ofarlig köldbärare som vatten-glykol går ut i lokalerna där människor finns.'}],
+{q:'Vad är en köldbärare? Förklara med egna ord.',need:2,
+ groups:[
+  {l:'Är en vätska eller ett medium som transporterar värme eller kyla',any:['vätska','medium','transport','för bort','för vidare','för ut','pump','cirkul','flödar','bär','överför','leder','för kyla','för värme']},
+  {l:'Exempel på köldbärare (vatten, glykol, brine)',any:['glykol','vatten','brine','saltlösning','salt','etanol','frostskydd','fryser','alkohol']},
+  {l:'Används i indirekta system mellan köldmediet och det som kyls',any:['indirekt','värmeväxlare','mellan','förångare','kylbatteri','sekundär','köldmedium']},
+  {l:'Tar upp eller avger värme / kyla',any:['värme','kyla','kall','energi','temperatur','kyler','värmer']}],
+ model:'En köldbärare är en vätska, till exempel vatten med glykol, som transporterar kyla eller värme mellan köldmediet och det som ska kylas. Den används i indirekta system och pumpas runt i en egen krets.'}],
 draw:'d1'});
 
 MODS.push({id:'m2',short:'Komponenter',title:'Komponenter, hållbarhet och korrosion',
